@@ -87,7 +87,7 @@ ChatBot& ChatBot::operator=(ChatBot &&source)
     std::cout << "ChatBot Move Assignment Operator" << std::endl;
     if (this == &source)
         return *this;
-    // deallocate heap memory
+    // Deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
         delete _image;
