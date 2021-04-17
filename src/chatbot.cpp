@@ -49,21 +49,29 @@ ChatBot::~ChatBot()
 ChatBot::ChatBot(const ChatBot &source)
 {
     std::cout << "ChatBot Copy Constructor" << std::endl;
+    // Copy member data
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
     _image = new wxBitmap(*source._image); 
+    // Set chat bot handle
+    _chatLogic->SetChatbotHandle(this);
 }
 
 // Copy assignment operator
 ChatBot& ChatBot::operator=(const ChatBot &source)
 {
     std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+    // No copy when self-assignment
     if (this == &source)
         return *this;
+    // Copy member data
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
     delete[] _image;
-    _image = new wxBitmap(*source._image); 
+    _image = new wxBitmap(*source._image);
+    // Set chat bot handle
+    _chatLogic->SetChatbotHandle(this);
+
     return *this;
 }
 
@@ -74,17 +82,22 @@ ChatBot::ChatBot(ChatBot &&source)
     // Move source data to this class instance
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     _image = source._image;
     // Invalidate data handles of source instance
-    source._image = nullptr;
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
+    source._currentNode = nullptr;
+    source._image = nullptr;
+    // Set chat bot handle
+    _chatLogic->SetChatbotHandle(this);
 }
 
 // Move assignment operator
 ChatBot& ChatBot::operator=(ChatBot &&source)
 {
     std::cout << "ChatBot Move Assignment Operator" << std::endl;
+    // No copy when self-assignment
     if (this == &source)
         return *this;
     // Deallocate heap memory
@@ -96,11 +109,15 @@ ChatBot& ChatBot::operator=(ChatBot &&source)
     // Move source data to this class instance
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     _image = source._image;
     // Invalidate data handles of source instance
-    source._image = nullptr;
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
+    source._currentNode = nullptr;
+    source._image = nullptr;
+    // Set chat bot handle
+    _chatLogic->SetChatbotHandle(this);
 
     return *this;
 }
