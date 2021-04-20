@@ -67,7 +67,8 @@ ChatBot& ChatBot::operator=(const ChatBot &source)
     // Copy member data
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
-    delete[] _image;
+    if (_image != NULL)
+        delete[] _image;
     _image = new wxBitmap(*source._image);
     // Set chat bot handle
     _chatLogic->SetChatbotHandle(this);
@@ -88,7 +89,7 @@ ChatBot::ChatBot(ChatBot &&source)
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
     source._currentNode = nullptr;
-    source._image = nullptr;
+    source._image = NULL;
     // Set chat bot handle
     _chatLogic->SetChatbotHandle(this);
 }
@@ -100,12 +101,6 @@ ChatBot& ChatBot::operator=(ChatBot &&source)
     // No copy when self-assignment
     if (this == &source)
         return *this;
-    // Deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
-    {
-        delete _image;
-        _image = NULL;
-    }
     // Move source data to this class instance
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
@@ -115,7 +110,7 @@ ChatBot& ChatBot::operator=(ChatBot &&source)
     source._chatLogic = nullptr;
     source._rootNode = nullptr;
     source._currentNode = nullptr;
-    source._image = nullptr;
+    source._image = NULL;
     // Set chat bot handle
     _chatLogic->SetChatbotHandle(this);
 

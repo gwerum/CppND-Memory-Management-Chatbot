@@ -106,13 +106,13 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         ////
 
                         // check if node with this ID exists already
-                        auto nodeIdEqualsTokenId = [&id](std::shared_ptr<GraphNode> node) { return node->GetID() == id; };
+                        auto nodeIdEqualsTokenId = [&id](std::unique_ptr<GraphNode> &node) { return node->GetID() == id; };
                         auto newNode = std::find_if( _nodes.begin(), _nodes.end(), nodeIdEqualsTokenId );
 
                         // create new element if ID does not yet exist
                         if (newNode == _nodes.end())
                         {
-                            _nodes.emplace_back(std::make_shared<GraphNode>(id));
+                            _nodes.emplace_back(std::make_unique<GraphNode>(id));
                             newNode = _nodes.end() - 1; // get iterator to last element
 
                             // add all answers to current node
@@ -136,9 +136,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                         if (parentToken != tokens.end() && childToken != tokens.end())
                         {
                             // get iterator on incoming and outgoing node via ID search
-                            auto equalsIncomingNodeID = [&parentToken](std::shared_ptr<GraphNode> node) { return node->GetID() == std::stoi(parentToken->second); };
+                            auto equalsIncomingNodeID = [&parentToken](std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(parentToken->second); };
                             auto parentNode = std::find_if(_nodes.begin(), _nodes.end(), equalsIncomingNodeID );
-                            auto equalsOutgoingNodeID = [&childToken](std::shared_ptr<GraphNode> node) { return node->GetID() == std::stoi(childToken->second); };
+                            auto equalsOutgoingNodeID = [&childToken](std::unique_ptr<GraphNode> &node) { return node->GetID() == std::stoi(childToken->second); };
                             auto childNode = std::find_if(_nodes.begin(), _nodes.end(), equalsOutgoingNodeID );
 
                             // create new edge
